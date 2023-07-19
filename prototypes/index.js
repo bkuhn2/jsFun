@@ -27,9 +27,6 @@ const kittyPrompts = {
     return babyAnimals
       .filter(baby => baby.color === 'orange')
       .map(item => item.name)
-
-    // Annotation:
-    // Write your annotation here as a comment
   },
 
   sortByAge(babyAnimals) {
@@ -37,8 +34,6 @@ const kittyPrompts = {
 
     return babyAnimals.sort((a, b) => b.age-a.age)
 
-    // Annotation:
-    // Write your annotation here as a comment
   },
 
   growUp(babyAnimals) {
@@ -83,7 +78,7 @@ const kittyPrompts = {
 
 // DATASET: clubs from ./datasets/clubs
 const clubPrompts = {
-  membersBelongingToClubs() {
+  membersBelongingToClubs(clubs) {
     // Your function should access the clubs data through a parameter (it is being passed as an argument in the test file)
     // Create an object whose keys are the names of people, and whose values are
     // arrays that include the names of the clubs that person is a part of. e.g.
@@ -93,10 +88,22 @@ const clubPrompts = {
     //   ...etc
     // }
 
-    /* CODE GOES HERE */
+    /* Get a list of all the people
+      Then iterate of clubs array and if that 'members' array has them, add the name
+    */
 
-    // Annotation:
-    // Write your annotation here as a comment
+    const names = clubs.reduce((acc, club) => {
+      const uniqueNames = club.members.filter(name => !acc.includes(name));
+      acc = [...acc, ...uniqueNames]
+      return acc
+    }, []);
+
+    return names.reduce((acc, student) => {
+      acc[student] = clubs
+        .filter(club => club.members.includes(student))
+        .map(club => club.club)
+      return acc;
+    }, {})
   }
 };
 
