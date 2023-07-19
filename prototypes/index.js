@@ -169,10 +169,13 @@ const cakePrompts = {
     //    ..etc
     // ]
 
-    /* CODE GOES HERE */
+    return cakes.map(cake => {
+      return {
+        flavor: cake.cakeFlavor,
+        inStock: cake.inStock,
+      }
+    })
 
-    // Annotation:
-    // Write your annotation here as a comment
   },
 
   onlyInStock() {
@@ -196,20 +199,19 @@ const cakePrompts = {
     // ..etc
     // ]
 
-    /* CODE GOES HERE */
+    return cakes.filter(cake => cake.inStock > 0)
 
-    // Annotation:
-    // Write your annotation here as a comment
   },
 
   totalInventory() {
     // Return the total amount of cakes in stock e.g.
     // 59
 
-    /* CODE GOES HERE */
+    return cakes.reduce((acc, cake) => {
+      acc += cake.inStock;
+      return acc;
+    }, 0)
 
-    // Annotation:
-    // Write your annotation here as a comment
   },
 
   allToppings() {
@@ -217,10 +219,12 @@ const cakePrompts = {
     // every cake in the dataset e.g.
     // ['dutch process cocoa', 'toasted sugar', 'smoked sea salt', 'berries', ..etc]
 
-    /* CODE GOES HERE */
+    return cakes.reduce((acc, cake) => {
+      const cakeToppings = cake.toppings.filter(toppo => !acc.includes(toppo))
+      acc = [...acc, ...cakeToppings]
+      return acc;
+    }, [])
 
-    // Annotation:
-    // Write your annotation here as a comment
   },
 
   groceryList() {
@@ -234,10 +238,17 @@ const cakePrompts = {
     //    ...etc
     // }
 
-    /* CODE GOES HERE */
+    const allToppos = this.allToppings()
 
-    // Annotation:
-    // Write your annotation here as a comment
+    return allToppos.reduce((acc, topping) => {
+      let instance = 0;
+      cakes.forEach(cake => {
+        if (cake.toppings.includes(topping)) instance ++
+      });
+      acc[topping] = instance;
+      return acc;
+    }, {});
+
   }
 };
 
