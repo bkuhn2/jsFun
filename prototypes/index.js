@@ -505,10 +505,10 @@ const breweryPrompts = {
     // Return the total beer count of all beers for every brewery e.g.
     // 40
 
-    /* CODE GOES HERE */
-
-    // Annotation:
-    // Write your annotation here as a comment
+    return breweries.reduce((acc, brewery) => {
+      acc += brewery.beers.length
+      return acc;
+    }, 0)
   },
 
   getBreweryBeerCount() {
@@ -520,10 +520,13 @@ const breweryPrompts = {
     // ...etc.
     // ]
 
-    /* CODE GOES HERE */
-
-    // Annotation:
-    // Write your annotation here as a comment
+    return breweries
+      .map(brewery => {
+        return {
+          name: brewery.name,
+          beerCount: brewery.beers.length
+        }
+      })
   },
 
   getSingleBreweryBeerCount(breweryName) {
@@ -532,10 +535,7 @@ const breweryPrompts = {
     // given 'Ratio Beerworks', return 5
 
 
-    /* CODE GOES HERE */
-
-    // Annotation:
-    // Write your annotation here as a comment
+    return breweries.find(brewery => brewery.name === breweryName).beers.length
   },
 
   findHighestAbvBeer() {
@@ -543,10 +543,13 @@ const breweryPrompts = {
     // e.g.
     // { name: 'Barrel Aged Nature\'s Sweater', type: 'Barley Wine', abv: 10.9, ibu: 40 }
 
-    /* CODE GOES HERE */
-
-    // Annotation:
-    // Write your annotation here as a comment
+    return breweries
+      .reduce((acc, brewery) => {
+        acc = [...acc, ...brewery.beers]
+        return acc;
+      }, [])
+      .sort((a,b) => b.abv - a.abv)
+      [0];
   }
 };
 
