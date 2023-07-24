@@ -429,10 +429,11 @@ const nationalParksPrompts = {
     //   parksVisited: ["Rocky Mountain", "Acadia", "Zion"]
     //}
 
-    /* CODE GOES HERE */
-
-    // Annotation:
-    // Write your annotation here as a comment
+    return nationalParks
+      .reduce((acc, park) => {
+        park.visited ? acc.parksVisited.push(park.name) : acc.parksToVisit.push(park.name)
+        return acc;
+      }, {parksToVisit: [], parksVisited: []})
   },
 
   getParkInEachState() {
@@ -445,10 +446,19 @@ const nationalParksPrompts = {
     // { Florida: 'Everglades' } ]
 
 
-    /* CODE GOES HERE */
+    const states = nationalParks.reduce((acc, park) => {
+      if (!acc.includes(park.location)) acc = [...acc, park.location]
+      return acc;
+    }, []);
 
-    // Annotation:
-    // Write your annotation here as a comment
+    return states
+      .reduce((acc, state) => {
+        const statePark = {
+          [state]: nationalParks.find(park => park.location === state).name
+        }
+        acc.push(statePark)
+        return acc;
+      }, [])
   },
 
   getParkActivities() {
@@ -467,10 +477,12 @@ const nationalParksPrompts = {
     //   'backpacking',
     //   'rock climbing' ]
 
-    /* CODE GOES HERE */
-
-    // Annotation:
-    // Write your annotation here as a comment
+    return nationalParks.reduce((acc, park) => {
+      park.activities.forEach(activity => {
+        if (!acc.includes(activity)) acc.push(activity)
+      })
+      return acc;
+    }, [])
   }
 };
 
