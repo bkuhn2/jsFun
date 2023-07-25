@@ -568,10 +568,8 @@ const boardGamePrompts = {
     // e.g. given an argument of "strategy", return
     // ["Chess", "Catan", "Checkers", "Pandemic", "Battle Ship", "Azul", "Ticket to Ride"]
 
-    /* CODE GOES HERE */
-
-    // Annotation:
-    // Write your annotation here as a comment
+    return boardGames[type]
+      .map(kindOfGame => kindOfGame.name)
   },
 
   listGamesAlphabetically(type) {
@@ -580,10 +578,7 @@ const boardGamePrompts = {
     // e.g. given an argument of "childrens", return
     // ["Candy Land", "Connect Four", "Operation", "Trouble"]
 
-    /* CODE GOES HERE */
-
-    // Annotation:
-    // Write your annotation here as a comment
+    return this.listGames(type).sort()
   },
 
   findHighestRatedGamesByType(type) {
@@ -591,10 +586,8 @@ const boardGamePrompts = {
     // e.g. given the argument of 'party', return
     // { name: 'Codenames', rating: 7.4, maxPlayers: 8 },
 
-    /* CODE GOES HERE */
-
-    // Annotation:
-    // Write your annotation here as a comment
+    return boardGames[type]
+      .sort((a, b) => b.rating - a.rating)[0]
   },
 
   averageScoreByType(type) {
@@ -602,10 +595,13 @@ const boardGamePrompts = {
     // e.g. given the argument of "strategy", return 7
     // note: do not worry about rounding your result.
 
-    /* CODE GOES HERE */
-
-    // Annotation:
-    // Write your annotation here as a comment
+    const sum = boardGames[type]
+      .reduce((sum, game) => {
+        sum += game.rating
+        return sum;
+      }, 0);
+    
+    return sum / boardGames[type].length
   },
 
   averageScoreByTypeAndPlayers(type, maximumPlayers) {
@@ -614,10 +610,15 @@ const boardGamePrompts = {
     // e.g. given the arguments of "strategy" and 2, return 6.16666666667
     // note: do not worry about rounding your result.
 
-    /* CODE GOES HERE */
+    const matchingGames = boardGames[type]
+      .filter(game => game.maxPlayers === maximumPlayers);
 
-    // Annotation:
-    // Write your annotation here as a comment
+    const sum = matchingGames.reduce((acc, elem) => {
+      acc += elem.rating;
+      return acc;
+    }, 0);
+
+    return sum / matchingGames.length;
   }
 };
 
