@@ -662,10 +662,12 @@ const turingPrompts = {
     //  { name: 'Robbie', studentCount: 18 }
     // ]
 
-    /* CODE GOES HERE */
-
-    // Annotation:
-    // Write your annotation here as a comment
+    return instructors.map(teacher => {
+      return {
+        name: teacher.name,
+        studentCount: cohorts.find(cohort => cohort.module === teacher.module).studentCount
+      }
+    });
   },
 
   studentsPerInstructor() {
@@ -675,10 +677,22 @@ const turingPrompts = {
     // cohort1804: 10.5
     // }
 
-    /* CODE GOES HERE */
+    /* 
+      - make an object that has the teachers per mod
+      - reduce - match above object
+    */
 
-    // Annotation:
-    // Write your annotation here as a comment
+    const teachersPerMod = cohorts
+      .reduce((acc, cohort) => {
+        acc[cohort.module] = instructors
+          .filter(teach => teach.module === cohort.module).length
+        return acc;
+      }, {});
+
+    return cohorts.reduce((acc, cohort) => {
+      acc[`cohort${cohort.cohort}`] = cohort.studentCount / teachersPerMod[cohort.module]
+      return acc;
+    }, {});
   },
 
   modulesPerTeacher() {
@@ -696,10 +710,43 @@ const turingPrompts = {
     //     Will: [1, 2, 3, 4]
     //   }
 
-    /* CODE GOES HERE */
+    const skills = cohorts.reduce((acc, cohort) => {
+      cohort.curriculum.forEach(skill => {
+        if (!acc.includes(skill)) acc = [...acc, skill]
+      })
+      return acc;
+    }, []);
 
-    // Annotation:
-    // Write your annotation here as a comment
+
+    const skillData = skills.reduce((acc, skill) => {
+      acc[skill] = cohorts
+        .filter(cohort => cohort.curriculum.includes(skill))
+        .map (cohort => cohort.module)
+      return acc;
+    }, {});
+
+
+    return instructors
+      .reduce((acc, teacher) => {
+
+        acc[teacher.name] = [];
+
+        let mods = [];
+
+        teacher.teaches
+          .forEach(skill => {
+            mods = [...mods, ...skillData[skill]]
+          });
+
+        mods.forEach(mod => {
+          if (!acc[teacher.name].includes(mod)) acc[teacher.name].push(mod)
+        });
+
+        acc[teacher.name].sort((a, b) => a - b);
+
+        return acc;
+      }, {});
+
   },
 
   curriculumPerTeacher() {
@@ -712,10 +759,23 @@ const turingPrompts = {
     //   recursion: [ 'Pam', 'Leta' ]
     // }
 
-    /* CODE GOES HERE */
 
-    // Annotation:
-    // Write your annotation here as a comment
+    const topicObj = cohorts.reduce((acc, cohort) => {
+      cohort.curriculum.forEach(topic => {
+        acc[topic] = []
+      })
+      return acc;
+    }, {});
+
+    const list = Object.keys(topicObj)
+
+    list.forEach(item => {
+      topicObj[item] = instructors
+        .filter(teach => teach.teaches.includes(item))
+        .map(teach => teach.name)
+    });
+
+    return topicObj;
   }
 };
 
