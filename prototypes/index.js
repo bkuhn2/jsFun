@@ -882,10 +882,22 @@ const astronomyPrompts = {
     //   }
     // ]
 
-    /* CODE GOES HERE */
+    const constObjNames = Object.keys(constellations);
 
-    // Annotation:
-    // Write your annotation here as a comment
+    const allConstellations = constObjNames.reduce((acc, name) => {
+      acc = [...acc, ...constellations[name].alternateNames]
+      return acc;
+    }, []);
+
+    const filteredStars = stars
+      .filter(star => allConstellations.includes(star.constellation))
+      .sort((a, b) => {
+        if (a.constellation[0] < b.constellation[0]) -1
+        if (a.constellation[0] > b.constellation[0]) 1
+        return 0
+      })
+    console.log('filteredStars: ', filteredStars);
+    return filteredStars //NOT DONE YET
   },
 
   starsByColor() {
