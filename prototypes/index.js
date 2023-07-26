@@ -889,15 +889,13 @@ const astronomyPrompts = {
       return acc;
     }, []);
 
-    const filteredStars = stars
+    return stars
       .filter(star => allConstellations.includes(star.constellation))
       .sort((a, b) => {
-        if (a.constellation[0] < b.constellation[0]) -1
-        if (a.constellation[0] > b.constellation[0]) 1
-        return 0
-      })
-    console.log('filteredStars: ', filteredStars);
-    return filteredStars //NOT DONE YET
+        if (a.constellation[0] < b.constellation[0]) { return -1 }
+        else if (a.constellation[0] > b.constellation[0]) { return 1 }
+        else return 0
+      });
   },
 
   starsByColor() {
