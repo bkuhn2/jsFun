@@ -969,10 +969,26 @@ const ultimaPrompts = {
     // Return the sum of the amount of damage for all the weapons that our characters can use
     // Answer => 113
 
-    /* CODE GOES HERE */
+    // return characters
+    //   .reduce((acc, character) => {
 
-    // Annotation:
-    // Write your annotation here as a comment
+    //     acc += character.weapons.reduce((acc, weapon) => {
+    //       acc += weapons[weapon].damage
+    //       return acc;
+    //     }, 0)
+
+    //     return acc;
+    //   }, 0); ALTERNATE - LESS EFFICIENT? Iterating w/in iterations...(?)
+
+    const allWeapons = characters.reduce((acc, character) => {
+      acc = [...acc, ...character.weapons]
+      return acc;
+    }, []);
+    
+    return allWeapons.reduce((acc, weapon) => {
+      acc += weapons[weapon].damage;
+      return acc;
+    }, 0);
   },
 
   charactersByTotal() {
@@ -980,10 +996,25 @@ const ultimaPrompts = {
     // Return the sum damage and total range for each character as an object.
     // ex: [ { Avatar: { damage: 27, range: 24 }, { Iolo: {...}, ...}
 
-    /* CODE GOES HERE */
+    return characters
+      .map(character => {
 
-    // Annotation:
-    // Write your annotation here as a comment
+        let characterDamage = 0
+        let characterRange = 0
+
+        character.weapons
+          .forEach(weapon => {
+            characterDamage += weapons[weapon].damage;
+            characterRange += weapons[weapon].range;
+          })
+
+        return {
+          [character.name]: {
+            damage: characterDamage,
+            range: characterRange
+          }
+        }
+      })
   },
 };
 
