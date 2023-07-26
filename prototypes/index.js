@@ -806,10 +806,31 @@ const bossPrompts = {
     //   { bossName: 'Scar', sidekickLoyalty: 16 }
     // ]
 
-    /* CODE GOES HERE */
+    const list = sidekicks
+      .reduce((acc, sidekick) => {
+        if (!acc.includes(sidekick.boss)) acc = [...acc, sidekick.boss]
+        return acc;
+      }, [])
 
-    // Annotation:
-    // Write your annotation here as a comment
+    // gets list of bosses...
+
+    const bossLoyaltyData = sidekicks.reduce((acc, sider) => {
+      if (!acc[sider.boss]) acc[sider.boss] = 0
+      acc[sider.boss] += sider.loyaltyToBoss; 
+      return acc;
+    }, {})
+
+    // generates loyalty per boss as an object
+
+    return list
+      .map(boss => {
+        return {
+          bossName: boss,
+          sidekickLoyalty: bossLoyaltyData[boss]
+        }
+      });
+
+    //iterates over bosses and creates new array based on prev object
   }
 };
 
