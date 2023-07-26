@@ -909,10 +909,18 @@ const astronomyPrompts = {
     //   red: [{obj}]
     // }
 
-    /* CODE GOES HERE */
+    const colors = stars
+      .reduce((acc, star) => {
+        if (!acc.includes(star.color)) acc = [...acc, star.color]
+        return acc;
+      }, []);
 
-    // Annotation:
-    // Write your annotation here as a comment
+    return colors
+      .reduce((acc, color) => {
+        acc[color] = stars.filter(star => star.color === color)
+        return acc;
+      }, {});
+    
   },
 
   constellationsStarsExistIn() {
@@ -931,10 +939,10 @@ const astronomyPrompts = {
     //    "The Little Dipper" ]
 
 
-    /* CODE GOES HERE */
-
-    // Annotation:
-    // Write your annotation here as a comment
+    return stars
+      .sort((a, b) => a.visualMagnitude - b.visualMagnitude)
+      .map(star => star.constellation)
+      .filter(name => name)
   }
 };
 
