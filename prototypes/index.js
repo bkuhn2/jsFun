@@ -1047,10 +1047,16 @@ const dinosaurPrompts = {
     //   'Jurassic World: Fallen Kingdom': 18
     // }
 
-    /* CODE GOES HERE */
-
-    // Annotation:
-    // Write your annotation here as a comment
+    const allDinos = Object.keys(dinosaurs);
+    const awesomeDinos = [];
+    allDinos.forEach(dino => {
+      if (dinosaurs[dino].isAwesome) awesomeDinos.push(dino)
+    });
+  
+    return movies.reduce((acc, movie) => {
+      acc[movie.title] = movie.dinos.filter(dino => awesomeDinos.includes(dino)).length
+      return acc;
+    }, {});
   },
 
   averageAgePerMovie() {
@@ -1077,12 +1083,25 @@ const dinosaurPrompts = {
             'Jurassic World: Fallen Kingdom': 59
           }
       }
+
+      - List of directors
+
     */
 
-    /* CODE GOES HERE */
+    const castData = movies.reduce((acc, movie) => {
+      let agesSum = 0;
+      movie.cast.forEach(castmember => {
+        agesSum += (movie.yearReleased - humans[castmember].yearBorn)
+      });
+      acc[movie.title] = Math.floor(agesSum / movie.cast.length);
+      return acc;
+    }, {});
 
-    // Annotation:
-    // Write your annotation here as a comment
+    return movies.reduce((acc, movie) => {
+      if (!acc[movie.director]) acc[movie.director] = {};
+      if (acc[movie.director]) acc[movie.director][movie.title] = castData[movie.title];
+      return acc;
+    }, {});
   },
 
   uncastActors() {
@@ -1111,10 +1130,28 @@ const dinosaurPrompts = {
       }]
     */
 
-    /* CODE GOES HERE */
+    const allActors = Object.keys(humans);
 
-    // Annotation:
-    // Write your annotation here as a comment
+    const movieActors = movies.reduce((acc, movie) => {
+      acc = [...acc, ...movie.cast]
+      return acc;
+    }, []);
+
+    return allActors
+      .filter(actor => !movieActors.includes(actor))
+      .map(actor => {
+        return {
+          name: actor,
+          nationality: humans[actor].nationality,
+          imdbStarMeterRating: humans[actor].imdbStarMeterRating
+        }
+      })
+      .sort((a, b) => {
+        if (a.nationality < b.nationality) return -1 
+        if (a.nationality > b.nationality) return 1
+        return 0
+      });
+
   },
 
   actorsAgesInMovies() {
@@ -1133,10 +1170,25 @@ const dinosaurPrompts = {
       { name: 'Bryce Dallas Howard', ages: [ 34, 37 ] } ]
     */
 
-    /* CODE GOES HERE */
+    return movies
+      .reduce((list, movie) => {
+        movie.cast.forEach(person => {
+          if (!list.includes(person)) list.push(person)
+        })
+        return list;
+      }, [])
+      .map(actor => {
+        return {
+          name: actor,
+          ages: movies
+            .filter(movie => movie.cast.includes(actor))
+            .map(movie => movie.yearReleased - humans[actor].yearBorn)
+        }
+      }) //best practice?? How solve more efficiently?
+    console.log('allmovieacatsors: ', allMovieActors);
 
-    // Annotation:
-    // Write your annotation here as a comment
+
+
   }
 };
 
